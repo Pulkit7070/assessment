@@ -21,13 +21,18 @@ const UserList: React.FC = () => {
       return;
     }
     try {
-      const res = await fetch('http://localhost:8080/users.php', {
+      // Use environment variable for API URL or fallback to localhost for development
+      const apiUrl = process.env.NODE_ENV === 'production' 
+        ? 'https://assessment-2-ixst.onrender.com/api/users'
+        : 'http://localhost:3001/api/users';
+      
+      const res = await fetch(apiUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: addName, email: addEmail })
       });
       const data = await res.json();
-      if (res.ok && data.user) {
+      if (res.ok && data.success) {
         setAddSuccess('User added successfully!');
         setAddName('');
         setAddEmail('');

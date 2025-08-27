@@ -38,6 +38,41 @@ app.get('/api/users', (req, res) => {
   }
 });
 
+// REST API endpoint to add a new user
+app.post('/api/users', (req, res) => {
+  try {
+    const { name, email } = req.body;
+    
+    if (!name || !email) {
+      return res.status(400).json({
+        success: false,
+        error: 'Name and email are required'
+      });
+    }
+    
+    // Create new user with auto-increment ID
+    const newUser = {
+      id: users.length + 1,
+      name: name.trim(),
+      email: email.trim()
+    };
+    
+    // Add to users array
+    users.push(newUser);
+    
+    res.status(201).json({
+      success: true,
+      data: newUser,
+      message: 'User created successfully'
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: 'Failed to create user'
+    });
+  }
+});
+
 // Health check endpoint
 app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', message: 'API is running' });

@@ -24,14 +24,19 @@ export const useOrgUsers = (): UseOrgUsersReturn => {
       setLoading(true);
       setError(null);
       
-  const response = await fetch('http://localhost:8080/users.php');
+      // Use environment variable for API URL or fallback to localhost for development
+      const apiUrl = process.env.NODE_ENV === 'production' 
+        ? 'https://assessment-2-ixst.onrender.com/api/users'
+        : 'http://localhost:3001/api/users';
+      
+      const response = await fetch(apiUrl);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const result = await response.json();
-      // result.users is the array from PHP
-      const orgUsers = Array.isArray(result.users)
-        ? result.users.filter((user: User) => user.email.toLowerCase().endsWith('.org'))
+      // result.data is the array from Node.js API
+      const orgUsers = Array.isArray(result.data)
+        ? result.data.filter((user: User) => user.email.toLowerCase().endsWith('.org'))
         : [];
       setUsers(orgUsers);
     } catch (err) {
