@@ -43,6 +43,17 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', message: 'API is running' });
 });
 
+// Root endpoint for testing
+app.get('/', (req, res) => {
+  res.json({ 
+    message: 'Assessment Backend API is running',
+    endpoints: {
+      health: '/api/health',
+      users: '/api/users'
+    }
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
   console.log(`Environment PORT: ${process.env.PORT || 'not set'}`);
